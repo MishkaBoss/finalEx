@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %} {% endblock %}- FlaskApp</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/reset.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/base.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/index.css') }}"
+    />
+  </head>
+
+  <body>
+    <div class="header-container">
+      <div class="nav-container">
+        <nav class="main-nav">
+          <a href="{{ url_for('index') }}">FlaskApp</a>
+          <a href="#">About</a>
+          <a href="#">Test</a>
+        </nav>
+      </div>
+    </div>
+    <div class="content">{% block content %} {% endblock %}</div>
+  </body>
+</html>

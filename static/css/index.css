@@ -1,0 +1,59 @@
+.todos-header-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem;
+}
+.todos-header {
+  font: 2em sans-serif;
+  font-weight: 600;
+}
+.add-todo-btn {
+  border: none;
+  border-radius: 8px;
+}
+.add-todo-btn:hover {
+  background-color: #6e86f1;
+}
+.add-todo-btn a {
+  text-decoration: none;
+}
+.todos-container {
+  /* border: 1px solid blue; */
+  display: flex;
+  justify-content: center;
+  margin: 1rem;
+}
+.todo {
+  background-color: #d4d3d3;
+  /* border: 1px solid red; */
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  width: 85%;
+}
+
+.todos-content {
+  margin: 1rem;
+}
+.todos-content > * {
+  margin-bottom: 5px;
+}
+.todo-content {
+  margin: 1rem;
+}
+
+.edit-btn {
+  border: none;
+  border-radius: 8px;
+  width: fit-content;
+  padding: 10px;
+  /* border: 1px solid green; */
+  margin: auto;
+  margin-bottom: 10px;
+}
+.edit-btn:hover {
+  background-color: #6e86f1;
+}
+.edit-btn a {
+  text-decoration: none;
+}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Edit "{{ todo['title'] }}" {% endblock %}</h1>
+    <form method="post">
+        <label for="title">Title</label>
+        <br>
+        <input type="text" name="title"
+               placeholder="Todo title"
+               value="{{ request.form['title'] or todo['title'] }}"></input>
+        <br>
+
+        <label for="content">Todo Content</label>
+        <br>
+        <textarea name="content"
+                  placeholder="Todo content"
+                  rows="15"
+                  cols="60"
+                  >{{ request.form['content'] or todo['content'] }}</textarea>
+        <br>
+        <button type="submit">Submit</button>
+       <hr>
+       <button type="submit">
+        <a href="{{ url_for('delete', id=todo['id'])}}">delete</a>
+       </button>
+
+    </form>
+    </form>
+{% endblock %}
+

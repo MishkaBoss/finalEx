@@ -1,0 +1,23 @@
+{% extends 'base.html' %} {% block content %}
+<div class="todos-header-container">
+  <h1 class="todos-header" xmlns="http://www.w3.org/1999/html">
+    {% block title %} Todos {% endblock %}
+  </h1>
+  <button class="add-todo-btn">
+    <a href="/create">Add new todo</a>
+  </button>
+</div>
+{% for todo in todos %}
+<div class="todos-container">
+  <div class="todo">
+    <div class="todos-content">
+      <p class="todo-date">Created: {{ todo['created'] }}</p>
+      <h2 class="todo-title">{{ todo['title'] }}</h2>
+      <p class="todo-content">{{ todo['content'] }}</p>
+    </div>
+    <button class="edit-btn" type="submit">
+      <a href="{{ url_for('edit', id=todo['id'])}}">Edit Todo</a>
+    </button>
+  </div>
+</div>
+{% endfor %} {% endblock %}
