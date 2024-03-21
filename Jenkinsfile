@@ -25,7 +25,14 @@ pipeline {
 
         stage('Run docker container') {
             steps {
-                sh 'docker run -d -p 5000:5000 final-ex-todo-app'
+               script {
+                    def containerExists = sh(script: 'docker ps -a -q --filter ancestor=final-ex-todo-app', returnStdout: true).trim()
+                    if (containerExists) {
+                        sh 'docker stop $(docker ps -a -q --filter ancestor=final-ex-todo-app)'
+                        sh 'docker rm $(docker ps -a -q --filter ancestor=final-ex-todo-app)'
+                    }
+                }
+             sh 'docker run -d -p 5000:5000 final-ex-todo-app'
             }
         }
 
