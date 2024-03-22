@@ -16,7 +16,7 @@ pipeline {
                 script {
                     def imageExists = sh(script: 'docker images -q final-ex-todo-app', returnStdout: true).trim()
                     if (imageExists) {
-                        sh 'docker rmi final-ex-todo-app'
+                        sh 'docker rmi -f final-ex-todo-app'
                     }
                 }
         sh 'docker build -t final-ex-todo-app ./finalEx'
