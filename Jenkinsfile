@@ -5,7 +5,7 @@ pipeline {
         name: 'REPO_URL'
     }
     stages {
-        stage('git clone') {
+        stage('Clone GitHub repository') {
             steps {
                 sh 'rm -rf finalEx'
                 sh "git clone ${REPO_URL}"
@@ -22,6 +22,36 @@ pipeline {
         sh 'docker build -t final-ex-todo-app ./finalEx'
             }
         }
+        stage('Run docker container locally') {
+            steps {
+                script {
+                    def containerExists = sh(script: 'docker ps -a -q -f "publish=5000"', returnStdout: true).trim()
+                    if (containerExists) {
+                        sh 'docker stop $(containerExists)'
+                        sh 'docker remove $(containerExists)'
+                    }
+                }
+                sh 'docker run -d -p 5000:5000 final-ex-todo-app'
+            }
+        }
+        stage('curl test') {
+            steps {
+                timeout(time: 10, unit: 'SECONDS') {
+                    sh 'curl -f http://localhost:5000'
+                }
+            }
+        }
+        stage('Stop and remove local container') {
+            steps {
+                script {
+                    def containerExists = sh(script: 'docker ps -a -q -f "publish=5000"', returnStdout: true).trim()
+                    if (containerExists) {
+                        sh 'docker stop $(containerExists)'
+                        sh 'docker remove $(containerExists)'
+                    }
+                }
+            }
+        }
         stage('Login to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerHubCredentials', passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) {
@@ -29,36 +59,25 @@ pipeline {
                 }
             }
         }
-        stage('Push image to docker hub') {
+        stage('Tag image') {
             steps {
-                sh 'docker tag final-ex-todo-app:latest devoops93/todo-app:v${BUILD_NUMBER}'
-                sh 'docker push devoops93/todo-app:v${BUILD_NUMBER}'
+                sh 'docker tag final-ex-todo-app:latest devoops93/todo-app:latest'
             }
         }
-
-        // stage('Connect to EC2 ') {
-        //     steps {
-        //         sshagent(['ec2-ssh']) 
-        //     }
-        // }
-        stage('Pull image from docker hub') {
+        stage('Push image to Docker Hub') {
             steps {
-                sh 'docker pull devoops93/todo-app:v${BUILD_NUMBER}'
+                sh 'docker push devoops93/todo-app:latest'
             }
         }
-
-        stage('Run docker container') {
-             steps {
+        stage('test') {
+            steps {
                 script {
-                    def containerExists = sh(script: 'docker ps -a -q -f "publish=5000"', returnStdout: true).trim()
-                    if (containerExists) {
-                        sh 'docker stop $(containerExists)'
-                        sh 'docker remove $(containerExists)'
-                        // sh 'docker stop $(docker ps -a -q -f "publish=5000")'
-                        // sh 'docker rm $(docker ps -a -q -f "publish=5000")'
+                    dir('/var/lib/jenkins/workspace/terraform') {
+                        def public_ip = sh(script: 'terraform output public_ip', returnStdout: true).trim()
+                        echo "The public IP is: ${public_ip}"
                     }
-                }
-                sh 'docker run -d -p 5000:5000 devoops93/todo-app:v${BUILD_NUMBER}'
+                }   
+                 
             }
         }
 
