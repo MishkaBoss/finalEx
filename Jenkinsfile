@@ -43,15 +43,10 @@ pipeline {
         }
         stage('Stop and remove local container') {
             steps {
-                script {
-                    def containerExists = sh(script: 'docker ps -a -q -f "publish=5000"', returnStdout: true).trim()
-                    if (containerExists) {
-                        sh 'docker stop $(containerExists)'
-                        sh 'docker remove $(containerExists)'
-                    }
+                        sh 'docker stop final-ex-todo-app'
+                        sh 'docker remove final-ex-todo-app'
                 }
             }
-        }
         stage('Login to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerHubCredentials', passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) {
