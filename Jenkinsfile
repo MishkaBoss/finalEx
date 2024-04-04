@@ -36,9 +36,7 @@ pipeline {
         }
         stage('Wait for container to start') {
             steps {
-                timeout(time: 10, unit: 'SECONDS') {
-                    sh 'sleep 10'
-                }
+                sleep(10)
             }
         }
         stage('curl test') {
