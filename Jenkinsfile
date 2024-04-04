@@ -16,7 +16,7 @@ pipeline {
                 script {
                     def imageExists = sh(script: 'docker images -q final-ex-todo-app', returnStdout: true).trim()
                     if (imageExists) {
-                        sh 'docker rmi -f final-ex-todo-app'
+                        sh "docker rmi -f ${imageExists}"
                     }
                 }
         sh 'docker build -t final-ex-todo-app ./finalEx'
@@ -27,8 +27,8 @@ pipeline {
                 script {
                     def containerExists = sh(script: 'docker ps -a -q -f "publish=5000"', returnStdout: true).trim()
                     if (containerExists) {
-                        sh 'docker stop ${containerExists}'
-                        sh 'docker remove ${containerExists}'
+                        sh "docker stop ${containerExists}"
+                        sh "docker remove ${containerExists}"
                     }
                 }
                 sh 'docker run -d -p 5000:5000 final-ex-todo-app'
@@ -51,8 +51,8 @@ pipeline {
                 script {
                     def containerExists = sh(script: 'docker ps -a -q -f "publish=5000"', returnStdout: true).trim()
                     if (containerExists) {
-                        sh 'docker stop ${containerExists}'
-                        sh 'docker remove ${containerExists}'
+                        sh "docker stop ${containerExists}"
+                        sh "docker remove ${containerExists}"
                     }
                 }
             }
