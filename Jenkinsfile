@@ -76,6 +76,12 @@ pipeline {
                 sh 'docker push devoops93/todo-app:latest'
             }
         }
+        stage('Kubernetes deployment') {
+            steps {
+                sh 'kubectl apply -f ./finalEx/deployment.yaml'
+                sh 'kubectl apply -f ./finalEx/service.yaml'
+            }
+        }
         stage('test') {
             steps {
                 script {
