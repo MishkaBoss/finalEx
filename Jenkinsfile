@@ -34,11 +34,16 @@ pipeline {
                 sh 'docker run -d -p 5000:5000 final-ex-todo-app'
             }
         }
-        stage('curl test') {
+        stage('Wait for container to start') {
             steps {
                 timeout(time: 10, unit: 'SECONDS') {
-                    sh 'curl -f http://localhost:5000'
+                    sh 'sleep 10'
                 }
+            }
+        }
+        stage('curl test') {
+            steps {
+                    sh 'curl -f http://localhost:5000'
             }
         }
         stage('Stop and remove local container') {
