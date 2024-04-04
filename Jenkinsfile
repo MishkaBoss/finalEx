@@ -78,8 +78,8 @@ pipeline {
         }
         stage('Kubernetes deployment') {
             steps {
-                sh 'kubectl apply -f ./finalEx/deployment.yaml'
-                sh 'kubectl apply -f ./finalEx/service.yaml'
+                sh 'kubectl apply -f todo-app-deployment.yaml'
+                sh 'kubectl apply -f todo-app-service.yaml'
             }
         }
         stage('test') {
