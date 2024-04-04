@@ -11,6 +11,17 @@ pipeline {
                 sh "git clone ${REPO_URL}"
             }
         }
+        stage('Delete a running container if exists') {
+            steps {
+                script {
+                    def containerExists = sh(script: 'docker ps -a -q -f "publish=5000"', returnStdout: true).trim()
+                    if (containerExists) {
+                        sh "docker stop ${containerExists}"
+                        sh "docker rm ${containerExists}"
+                    }
+                }
+            }
+        }
         stage('Delete previous image if exists and build docker image') {
             steps {
                 script {
@@ -24,13 +35,6 @@ pipeline {
         }
         stage('Run docker container locally') {
             steps {
-                script {
-                    def containerExists = sh(script: 'docker ps -a -q -f "publish=5000"', returnStdout: true).trim()
-                    if (containerExists) {
-                        sh "docker stop ${containerExists}"
-                        sh "docker remove ${containerExists}"
-                    }
-                }
                 sh 'docker run -d -p 5000:5000 final-ex-todo-app'
             }
         }
